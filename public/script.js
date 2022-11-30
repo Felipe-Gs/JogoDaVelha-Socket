@@ -4,9 +4,8 @@ const socket = io.connect('http://localhost:3333/');
 
 // Quando houver alteração no backend
 socket.on('test', (data) => {
-    toChangeArray(data.position);
+    mudarValor(data.position);
 })
-
 
 
 const valIndexx = []
@@ -31,88 +30,6 @@ const items = [
     0, 0, 0
 ]
 let flag = true;
-
-// Renderiza dento da <div #hash />
-function renderHashGame() {
-    let table = `<table>`;
-
-    for (let r = 0; r < 3; r++) {
-        table += `<tr>`;
-
-        for (let d = 0; d < 3; d++) {
-            table += `<td>`;
-
-            table += `</td>`;
-        }
-
-        table += `</tr>`;
-    }
-    table += `</table>`;
-    document.querySelector('#hash').innerHTML = table;
-    
-    
-    
-}
-
-// adiciona o evento de click a todos os <td>
-function addEvents() {
-    const allTableData = document.querySelectorAll('#hash td');
-   
-    allTableData.forEach((value, index) => {
-        value.addEventListener('click', () => {
-            // Emite a posição para o servidor
-            socket.emit('test', { position: index });
-            console.log(index + 'valor do index')
-            // console.log('o valor do index é: ' + index)
-            // resultado.push(index)
-            // console.log(resultado + 'resultados')
-            
-        })
-    })
-   
-}
-
-// Muda o estado do array items
-// Altera também a flag
-function toChangeArray(valIndex) {
-    
-    const allTableData = document.querySelectorAll('#hash td');
-
-    if(flag && items[valIndex] === 0) {
-        items[valIndex] = 1;
-
-        // adicona uma classe x
-        allTableData[valIndex].classList.add('x');
-        flag = false;
-
-        valoresX.push(valIndex)
-        valIndexx.push(valIndex)
-        console.log(valoresX)
-        console.log(valIndex + 'valores do index')
-        console.log(valIndexx + 'valores totais dos index')
-        verificaGanhador()
-        let rs = document.querySelectorAll('#resultados');
-        
-        
-        
-    }else if (!flag && items[valIndex] === 0) {
-        items[valIndex] = 2;
-
-        // adicona uma classe circule
-        allTableData[valIndex].classList.add('circule');
-        flag = true;
-        valIndexx.push(valIndex)
-        valoresO.push(valIndex)
-        console.log(valIndexx + 'valores totais dos index')
-        verificaGanhadorO()
-        // console.log(valoresO + 'valores O')
-    }
-
-    
-    // console.log(items[valIndex])
-    // console.log('x = 1, O = 2')
-    
-}
 
 function verificaGanhador(){
     console.log(valoresX +'valores x')
@@ -234,11 +151,94 @@ function verificaGanhadorO(){
             resp.innerHTML = `Empate`
         }
 }
+// Renderiza dento da <div #hash />
+function jogar() {
+    let table = `<table>`;
+
+    for (let r = 0; r < 3; r++) {
+        table += `<tr>`;
+
+        for (let d = 0; d < 3; d++) {
+            table += `<td>`;
+
+            table += `</td>`;
+        }
+
+        table += `</tr>`;
+    }
+    table += `</table>`;
+    document.querySelector('#hash').innerHTML = table;
+    
+    
+    
+}
+
+// adiciona o evento de click a todos os <td>
+function clicks() {
+    const allTableData = document.querySelectorAll('#hash td');
+   
+    allTableData.forEach((value, index) => {
+        value.addEventListener('click', () => {
+            // Emite a posição para o servidor
+            socket.emit('test', { position: index });
+            console.log(index + 'valor do index')
+            // console.log('o valor do index é: ' + index)
+            // resultado.push(index)
+            // console.log(resultado + 'resultados')
+            
+        })
+    })
+   
+}
+
+// Muda o estado do array items
+// Altera também a flag
+function mudarValor(valIndex) {
+    
+    const allTableData = document.querySelectorAll('#hash td');
+
+    if(flag && items[valIndex] === 0) {
+        items[valIndex] = 1;
+
+        // adicona uma classe x
+        allTableData[valIndex].classList.add('x');
+        flag = false;
+
+        valoresX.push(valIndex)
+        valIndexx.push(valIndex)
+        console.log(valoresX)
+        console.log(valIndex + 'valores do index')
+        console.log(valIndexx + 'valores totais dos index')
+        verificaGanhador()
+        let rs = document.querySelectorAll('#resultados');
+        
+        
+        
+    }else if (!flag && items[valIndex] === 0) {
+        items[valIndex] = 2;
+
+        // adicona uma classe bolinha
+        allTableData[valIndex].classList.add('bolinha');
+        flag = true;
+        valIndexx.push(valIndex)
+        valoresO.push(valIndex)
+        console.log(valIndexx + 'valores totais dos index')
+        verificaGanhadorO()
+        // console.log(valoresO + 'valores O')
+    }
+
+    
+    // console.log(items[valIndex])
+    // console.log('x = 1, O = 2')
+    
+}
+
+
 
 function Reiniciar(){
     location.reload();
 }
 
 // Chama as funçoes
-renderHashGame();
-addEvents();
+jogar();
+clicks();
